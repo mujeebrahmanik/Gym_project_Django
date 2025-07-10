@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% load static %}
+{% load check_package %}
+{% block container %}
+
+    <!-- Hero Section Begin -->
+    <section class="hero-section">
+        <div class="hs-slider owl-carousel">
+            {% for i in banners %}
+            <div class="hs-item set-bg" data-setbg="{{i.image.url}}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-6">
+                            <div class="hi-text">
+                                {{i.content|safe}}
+                                <a href="#" class="primary-btn">Get info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Why chose us?</span>
+                        <h2>PUSH YOUR LIMITS FORWARD</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-034-stationary-bike"></span>
+                        <h4>Modern equipment</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            dolore facilisis.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-033-juice"></span>
+                        <h4>Healthy nutrition plan</h4>
+                        <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
+                            facilisis.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-002-dumbell"></span>
+                        <h4>Proffesponal training plan</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            dolore facilisis.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-014-heart-beat"></span>
+                        <h4>Unique to your needs</h4>
+                        <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
+                            facilisis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ChoseUs Section End -->
+
+    <!-- Classes Section Begin -->
+    <section class="classes-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Our Services</span>
+                        <h2>WHAT WE PROVIDE</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for i in data %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="class-item">
+                        <div class="ci-pic">
+                            <img src="{{i.image.url}}" alt="{{i.title}}">
+                        </div>
+                        <div class="ci-text">
+                            <h5>{{i.title}}</h5>
+                            <a href="{% url "services_details" i.id %}"><i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+               
+            </div>
+        </div>
+    </section>
+    <!-- ChoseUs Section End -->
+
+    <!-- Banner Section Begin -->
+    <section class="banner-section set-bg" data-setbg="{% static "img/banner-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="bs-text">
+                        <h2>registration now to get more deals</h2>
+                        <div class="bt-tips">Where health, beauty and fitness meet.</div>
+                        <a href="#" class="primary-btn  btn-normal">Appointment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+
+    <!-- Pricing Section Begin -->
+    <section class="pricing-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Our Plan</span>
+                        <h2>Choose your pricing plan</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {% for i in plans %}
+                <div class="col-lg-4 col-md-8">
+                    <div class="ps-item">
+                        <h3>{{i.title}}</h3>
+                        <div class="pi-price">
+                            <h2>$ {{i.price}}.0 /mo</h2>
+                        </div>
+                        <ul>
+                            {% for f in i.subscription_feature_set.all %}
+                            <li>{{f.feature}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% check_user_package request.user.id i.id as package_check %}
+                        {% check_plan_Validity request.user.id i.id as plan_check %}
+                         
+                        {% if package_check and plan_check %}
+                        <h4 class="text-success mb-2">Active </h4>
+                        <button class="primary-btn btn-disabled" disabled>Purchased</button>
+                        {% else %}
+                        <a href="{% url "checkout" i.id %}" class="primary-btn pricing-btn">Enroll now</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                
+            </div>
+        </div>
+    </section>
+    <!-- Pricing Section End -->
+
+    <!-- Gallery Section Begin -->
+    <div class="gallery-section">
+        <div class="gallery">
+            <div class="grid-sizer"></div>
+            <div class="gs-item grid-wide set-bg" data-setbg="{% static "img/gallery/gallery-1.jpg" %}">
+                <a href="{% static "img/gallery/gallery-1.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="{% static "img/gallery/gallery-2.jpg" %}">
+                <a href="{% static "img/gallery/gallery-2.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="{% static "img/gallery/gallery-3.jpg" %}">
+                <a href="{% static "img/gallery/gallery-3.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="{% static "img/gallery/gallery-4.jpg" %}">
+                <a href="{% static "img/gallery/gallery-4.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="{% static "img/gallery/gallery-5.jpg" %}">
+                <a href="{% static "img/gallery/gallery-5.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item grid-wide set-bg" data-setbg="{% static "img/gallery/gallery-6.jpg" %}">
+                <a href="{% static "img/gallery/gallery-6.jpg" %}" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- Gallery Section End -->
+
+    <!-- Team Section Begin -->
+    <section class="team-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="team-title">
+                        <div class="section-title">
+                            <span>Our Team</span>
+                            <h2>TRAIN WITH EXPERTS</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ts-slider owl-carousel">
+                    {% for i in trainers %}
+                    <div class="col-lg-4">
+                        {% if i.image %}
+                        <div class="ts-item set-bg" data-setbg="{{i.image.url}}">
+                        {% else %}
+                        <div class="ts-item set-bg" data-setbg="{{i.image}}">
+
+                        {% endif %}
+                        
+                            <div class="ts_text">
+                                <h4>{{i.trainer.first_name}} {{i.trainer.last_name}}</h4>
+                                <span>{{i.profession}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section End -->
+
+    <!-- Get In Touch Section Begin -->
+    
+    <!-- Get In Touch Section End -->
+
+
+
+
+{% endblock container %}
+
+
+
+
+ 

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg=" {% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Profile</h2>
+                        <div class="bt-option">
+                            <a href="{% url "home" %}">Home</a>
+                            <span>Profile
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    {% include "user/sidebar.html" %}
+                </div>
+                <div class="col-lg-6">
+                    <form action="" method="post" id="profile-form">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label text-white fw-semibold">
+                            {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.help_text %}
+                            <small class="form-text text-muted mt-3">{{ field.help_text }}</small>
+                            {% endif %}
+
+                            {% if field.errors %}
+                            <div class="text-danger mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" class="form-control btn" style="background-color:#f36100;"><h5 style="color:white;">Update Profile</h5></button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+
+    <script>
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+
+
+        $(document).ready(function() {
+          $(document).on('submit','#profile-form',function(e) {
+            e.preventDefault();
+
+            $.ajax({
+              url: "{% url 'user-profile' %}",  // Make sure this URL is correct
+              type: 'POST',
+              data: $(this).serialize(),
+              headers:{
+                'X-CSRFToken':getCookie('csrftoken')
+             },
+              dataType:'json',
+
+              success: function(response) {
+                if (response.status === 'success') {
+                  $('#profile-form').replaceWith(response.html);
+                  alert('Profile updated successfully!');
+                } else {
+                  alert('Something went wrong!');
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+              }
+            });
+          });
+        });
+      </script>
+      
+  
+    
+
+    {% endblock container %}

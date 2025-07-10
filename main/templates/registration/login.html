@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+<style>
+    .errorlist li{
+        color:red;
+        font-weight:bold;
+        margin-bottom:15px;
+    }
+</style>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Login</h2>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-3">
+                    <div class="leave-comment tabcontent" id="user">
+                        <form  id="login-form" method="post">
+                            {{form.as_p}}
+                            {% csrf_token %}
+                            <button type="submit">Submit</button>
+                        </form>
+                        <h6 class="mt-4 text-white">Dont have account ?  <a  href="{% url "signup" %}" style="color:#f36100;">Register Now</a> </h6>
+
+                    </div>
+
+                    
+
+
+                    </div>
+                    <div id="response-msg" class="mt-3"></div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+
+    {% comment %} <script>
+
+        function openrole(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+          
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+              tabcontent[i].style.display = "none";
+            }
+          
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(" active", "");
+              tablinks[i].style.backgroundColor = ""
+
+            }
+          
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+            evt.currentTarget.style = "background-color:#f36100;"
+          }
+
+          window.onload = function () {
+            document.getElementById("defaultOpen").click();
+          };
+
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        $(document).ready(function (){
+            $('#enq-form').on('submit',function(e){
+                e.preventDefault();
+
+                let formData=$(this).serialize();
+                $.ajax({
+                    type:'POST',
+                    url:"{% url 'enquiry' %}",
+                    data:formData,
+                    headers:{
+                        'X-CSRFToken':getCookie('csrftoken')
+                    },
+                    success:function(response){
+                        if (response.success){
+                            $('#response-msg').html('<h5 style="color:green;">'+response.message+'</h5>');
+                            $('#enq-form')[0].reset();
+                        }else{
+                            let errorList='<ul>';
+                            $.each(response.errors,function(key,value){
+                                errorList+='<li>'+ key +': '+ value[0]+'</li>'
+                            });
+                            errorList+='</ul>'
+                            $('#response-msg').html('<h5 style="color:red;">'+response.message+'</h5>');
+
+                        }
+                    },
+                    error:function(){
+                        $('#response-msg').html('<h5 style="color:red;"> An error Occured Please try again.</h5>');
+
+                    }
+                });
+            });
+        });
+    </script>
+     {% endcomment %}
+    {% endblock container %}

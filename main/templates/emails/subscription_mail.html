@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Subscription Confirmation</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #1a1a1a;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .email-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #111;
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #f36100;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #f36100;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .content p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .content-table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+    }
+
+    .content-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    .content-table td:first-child {
+      color: #1a1a1a;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #f36100;
+      color: #fff;
+      padding: 12px 24px;
+      margin-top: 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    a {
+      color: #f36100;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="header">
+      <h1>Subscription Confirmed ✅</h1>
+    </div>
+
+    <div class="content">
+      <p>Hi <strong>{{ username }}</strong>,</p>
+      <p>🎉 We're excited to let you know that your subscription to the <strong>{{ plan }}</strong> plan has been successfully activated!</p>
+
+      <table class="content-table">
+        <tr>
+            <td>Duration:</td>
+            <td>{{ duration }} Months</td>
+          </tr>
+        <tr>
+          <td>Start Date:</td>
+          <td>{{ start_date }}</td>
+        </tr>
+        <tr>
+          <td>End Date:</td>
+          <td>{{ end_date }}</td>
+        </tr>
+        <tr>
+          <td>Total Paid:</td>
+          <td>$ {{ price }}</td>
+        </tr>
+      </table>
+
+      <p>We’re thrilled to have you on board. If you have any questions, feel free to <a href="mailto:support@example.com">contact our team</a>.</p>
+
+      <a href="https://yourwebsite.com/dashboard" class="btn">Go to Dashboard</a>
+    </div>
+
+    <div class="footer">
+      &copy; {{ start_date|date:"Y" }} YourCompany. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>

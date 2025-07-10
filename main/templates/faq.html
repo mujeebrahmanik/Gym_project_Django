@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg=" {% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Faq</h2>
+                        <div class="bt-option">
+                            <a href="{% url "home" %}">Home</a>
+                            <span>Faq</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>faq</span>
+                        <h2>FREQUENTLY ASKED QUESTIONS</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                
+               <!-- Include Bootstrap CSS -->
+
+            <div class="accordion" id="aboutUsAccordion">
+                {% for i in faq %}
+            <div class="accordion-item mt-3">
+                <h2 class="accordion-header" id="faq{{i.id}}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAbout{{i.id}}" aria-expanded="false" aria-controls="collapseAbout">
+                    {{i.question}} 
+                </button>
+                </h2>
+                <div id="collapseAbout{{i.id}}" class="accordion-collapse collapse" aria-labelledby="headingAbout" data-bs-parent="#aboutUsAccordion">
+                <div class="accordion-body">
+{{i.answer}} 
+               </div>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+            </div>
+        </div>
+    </section>
+  
+
+    {% endblock container %}

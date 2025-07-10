@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Register</h2>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad register-form-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-3">
+                    <div class="leave-comment">
+
+                        <form  id="signup-form" method="post">
+                            {{form.as_p}}
+                            {% csrf_token %}
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <h5 class="mt-3 text-white">Already have account ?  <a  href="{% url "login" %}" class="text-success">Login</a> </h5></div>
+
+                <div id="error-msg" class="mt-3 text-center"></div>
+
+           
+        </div>
+    </section>
+    
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        $(document).ready(function (){
+            $('#signup-form').on('submit',function(e){
+                e.preventDefault();
+                $('#error-msg').empty();
+
+                let formData=$(this).serialize();
+                $.ajax({
+                    type:'POST',
+                    url:"{% url 'signup' %}",
+                    data:formData,
+                    headers:{
+                        'X-CSRFToken':getCookie('csrftoken')
+                    },
+                    success:function(response){
+                        if (response.success){
+                            window.location.href = response.redirect_url
+                        }else{
+                            let errors = JSON.parse(response.errors);
+                            for (let field in errors){
+                                errors[field].forEach(function(error){
+                                    $('#error-msg').append('<h6 style="color:red;margin-bottom:10px;">'+field+' : '+error.message+'</h6>');
+                                });
+                            }  
+
+                        }
+                    },
+                    error:function(){
+                        $('#error-msg').html('<h5 style="color:red;"> An error Occured Please try again.</h5>');
+
+                    }
+                });
+            });
+        });
+    </script>
+    
+    {% endblock container %}

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static "img/breadcrumb-bg.jpg " %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Checkout</h2>
+                        <div class="bt-option">
+                            <a href="{% url "home" %}">Home</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Services Section Begin -->
+    <section class="services-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>CHECKOUT</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="class-item">
+                       
+                        <div class="ci-text px-5 py-4">
+                            <h4 class="text-center mb-4">PLAN DETAILS</h4>
+
+                            <div style="width: 100%;">
+                                <table style="width: 100%;" class="table table-dark table-striped-columns" border="1">
+                                <tr>
+                                    <td colspan="2"  class="p-3 font-weight-bold">Plan</td>
+                                    <td  class="p-3 font-weight-bold">{{plan.title}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"  class="p-3 font-weight-bold">Price</td>
+                                    <td  class="p-3 font-weight-bold">${{plan.price}} / mo</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"  class="p-3 font-weight-bold">Features</td>
+                                    <td>
+                                        <ul class="px-3 font-weight-bold">
+                                            {% for i in plan.subscription_feature_set.all %}
+                                            <li>{{i.feature}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="class-item">
+                       
+                        <div class="ci-text px-5 py-4">
+                            <h4 class="text-center mb-4">PAYMENT DETAILS</h4>
+
+                            <div style="width: 100%;">
+                                <table style="width: 100%;" class="table table-dark table-striped-columns" border="1">
+                                    <tr>
+                                        <th colspan="2">Validity</th>
+                                        <th>Discount</th>
+                                    </tr>
+
+                                    {% for i in plan.plan_discount_set.all %}
+
+                                <tr>
+                                   
+                                    <td colspan="2"  class="p-3 font-weight-bold">
+                                        <div class="form-check">
+                                            <input class="form-check-input validity-selector" type="radio" name="validity" id="{{i.id}}" data-price="{{plan.price}}" data-discount="{{i.discount}}" value="{{i.duration_months}}">
+                                            <label class="form-check-label" for="{{i.id}}">
+                                             {{i.duration_months}} month
+                                            </label>
+                                          </div>
+                                    </td>
+                                    <td  class="p-3 font-weight-bold">{{i.discount}} %</td>
+                                </tr>
+
+                                {% endfor %}
+
+                               
+
+                               
+                            </table>
+                            
+                            </div>
+
+
+                            <div style="width: 100%;">
+                                <table style="width: 100%;" class="table table-dark table-striped-columns" border="1">
+                    
+
+                                <tr>
+                                   
+                                    <td class="p-3">
+                                        <h5>TOTAL AMOUNT : </h5>
+                                    </td>
+                                    <td  class="p-3"><h5 id="total-amount"></h5></td>
+                                </tr>
+                                
+                            </table>
+                        
+                            </div>
+                            <div>
+                                <form action="{% url "checkout_session" plan.id %}" method="post">
+                                {% csrf_token %}
+                                <button href="" type="button" class="primary-btn" id="checkout-button" data-plan="{{plan.id}}">Proceed to payment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+               
+            </div>
+
+        </div>
+    </section>
+    <!-- Services Section End -->
+
+    <!-- Banner Section Begin -->
+    
+    <!-- Banner Section End -->
+
+    <!-- Pricing Section Begin -->
+   
+    <!-- Pricing Section End -->
+
+    <!-- Get In Touch Section Begin -->
+    
+    <!-- Get In Touch Section End -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let final_price = 0;
+            let selected_months = 1;
+    
+            $('.validity-selector').on('click', function() {
+                let plan_price = $(this).attr('data-price');
+                let duration = $(this).val();
+                let discount = $(this).attr('data-discount');
+                let total = plan_price * duration;
+                let calculated_disc = total * discount / 100;
+                let last_price = (parseFloat(total) - parseFloat(calculated_disc)).toFixed(2);
+    
+                final_price = last_price;
+                selected_months = duration;
+    
+                $('#total-amount').text('$ ' + last_price);
+            });
+    
+            $('#checkout-button').on('click', function() {
+                let planId = $(this).attr('data-plan');
+    
+                console.log("Clicked Checkout Button");
+                console.log("Plan ID:", planId);
+                console.log("Final price:", final_price);
+                console.log("Selected months:", selected_months);
+    
+                fetch('/checkout_session/' + planId + '/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        months: selected_months,
+                        total_amount: final_price
+                    })
+                })
+                .then(async res => {
+                    const text = await res.text();
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.url) {
+                            window.location.href = data.url;
+                        } else {
+                            console.error("Server error:", data);
+                        }
+                    } catch (err) {
+                        console.error("Not valid JSON. Raw response:", text);
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch failed:", err);
+                });
+            });
+    
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+    
+
+    {% endblock container %}
+
+   

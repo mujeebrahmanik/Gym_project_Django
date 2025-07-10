@@ -1,0 +1,12 @@
+<div class="list-group">
+    <a href="{% url "user-dashboard" %}" class="list-group-item list-group-item-action" aria-current="true" {% if request.resolver_match.url_name == 'user-dashboard' %} style="background-color:#f36100;"{% endif %} >
+     <h5 {% if request.resolver_match.url_name == 'user-dashboard' %}class="text-white" {% endif %}> Dashboard</h5>
+    </a>
+    <a href="{% url "user-profile" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'user-profile' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'user-profile' %}class="text-white" {% endif %}>Profile</h5></a>
+    <a href="{% url "user-change-password" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'user-change-password' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'user-change-password' %}class="text-white" {% endif %}>Change Password</h5></a>
+    {% if request.resolver_match.url_name == 'notification' %} 
+    <a href="{% url "notification" %}" class="list-group-item list-group-item-action" style="background-color:#f36100;"><h5 class="text-white" >Messages <span class="badge text-bg-primary ml-1 " id="sidebar-count"></span></h5></a>
+    {% else %}
+    <a href="{% url "notification" %}" class="list-group-item list-group-item-action"><h5>Messages <span class="badge text-bg-primary ml-1 ">{{unread}}</span></h5></a>
+    {% endif %}
+  </div>

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg=" {% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>MY SUBSCRIBERS</h2>
+                        <div class="bt-option">
+                            <a href="{% url "home" %}">Home</a>
+                            <span>Subscribers
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    {% include "trainer/sidebar.html" %}
+                </div>
+                <div class="col-lg-9">
+
+
+                    <style>
+                        table.full-border {
+                          width: 100%;
+                          border-collapse: collapse;
+                        }
+                        table.full-border th,
+                        table.full-border td {
+                          border: 1px solid #ffffff; /* white borders */
+                          padding: 12px;
+                          color: white;
+                        }
+                        table.full-border th {
+                          font-weight: bold;
+                          background-color: #333333; /* Optional: darker background for header */
+                        }
+                      </style>
+                      
+                      <table class="full-border">
+                        <tr>
+                            <th><h5 class="text-white">Sl.no</h5></th>
+                          <th><h5 class="text-white">Month</h5></th>
+                          <th><h5 class="text-white">Year</h5></th>
+                          <th><h5 class="text-white">Worked Days</h5></th>
+                          <th><h5 class="text-white">Salary</h5></th>
+                          <th><h5 class="text-white">Credited Date</h5></th>
+                        </tr>
+                        {% for i in data %}
+                        <tr>
+                        <td>{{ forloop.counter}}</td>
+                          <td>{{ i.month }} </td>
+                          <td>{{ i.year }}</td>
+                          <td>{{ i.worked_days }}</td>
+                          <td>{{ i.amount }}</td>
+                          <td>{{ i.added_date }}</td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                      
+
+                    
+
+                    
+            </div>
+            
+        </div>
+
+        <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-dark">
+        <div class="modal-header">
+          <h3 class="modal-title  text-white" id="exampleModalLabel">Achievements</h3>
+          
+          <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        {% comment %} <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> {% endcomment %}
+      </div>
+    </div>
+  </div>
+    </section>
+
+  
+    
+
+    {% endblock container %}

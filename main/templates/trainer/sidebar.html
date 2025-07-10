@@ -1,0 +1,14 @@
+<div class="list-group">
+    <a href="{% url "trainer-dashboard" %}" class="list-group-item list-group-item-action" aria-current="true" {% if request.resolver_match.url_name == 'trainer-dashboard' %} style="background-color:#f36100;"{% endif %} >
+     <h5 {% if request.resolver_match.url_name == 'trainer-dashboard' %}class="text-white" {% endif %}> Dashboard</h5>
+    </a>
+    <a href="{% url "trainer-profile" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'trainer-profile' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'trainer-profile' %}class="text-white" {% endif %}>Profile</h5></a>
+    <a href="{% url "trainer-subscribers" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'trainer-subscribers' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'trainer-subscribers' %}class="text-white" {% endif %}>My Subscribers</h5></a>
+    <a href="{% url "trainer-payments" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'trainer-payments' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'trainer-payments' %}class="text-white" {% endif %}>Payments</h5></a>
+    <a href="{% url "trainer-change-password" %}" class="list-group-item list-group-item-action" {% if request.resolver_match.url_name == 'trainer-change-password' %} style="background-color:#f36100;"{% endif %}><h5 {% if request.resolver_match.url_name == 'trainer-change-password' %}class="text-white" {% endif %}>Change Password</h5></a>
+    {% if request.resolver_match.url_name == 'trainer_notification' %} 
+    <a href="{% url "trainer_notification" %}" class="list-group-item list-group-item-action" style="background-color:#f36100;"><h5 class="text-white" >Messages <span class="badge text-bg-primary ml-1 " id="sidebar-count">{{unread}}</span></h5></a>
+    {% else %}
+    <a href="{% url "trainer_notification" %}" class="list-group-item list-group-item-action"><h5>Messages <span class="badge text-bg-primary ml-1 " ></span></h5></a>
+    {% endif %}
+  </div>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static "img/breadcrumb-bg.jpg " %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Our Team</h2>
+                        <div class="bt-option">
+                            <a href="./index.html">Home</a>
+                            <span>Our team</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Team Section Begin -->
+    <section class="team-section team-page spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="team-title">
+                        <div class="section-title">
+                            <span>Our Team</span>
+                            <h2>TRAIN WITH EXPERTS</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                
+                {% for i in trainers %}
+                <div class="col-lg-4">
+                    {% if i.image %}
+                    <div class="ts-item set-bg" data-setbg="{{i.image.url}}">
+                    {% else %}
+                    <div class="ts-item set-bg" data-setbg="{{i.image}}">
+
+                    {% endif %}
+                    
+                        <div class="ts_text">
+                            <h4>{{i.trainer.first_name}} {{i.trainer.last_name}}</h4>
+                            <span>{{i.profession}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Team Section End -->
+
+    <!-- Get In Touch Section Begin -->
+    
+    <!-- Get In Touch Section End -->
+
+    {% endblock container %}

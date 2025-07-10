@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+{% block container %}
+
+<style>
+.readbutton{
+    display:none;
+}
+</style>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg=" {% static "img/breadcrumb-bg.jpg" %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Notifications</h2>
+                        <div class="bt-option">
+                            <a href="{% url "home" %}">Home</a>
+                            <span>Notifications
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    {% include "user/sidebar.html" %}
+                </div>
+                <div class="col-lg-9">
+                    <h5 class="text-white notif-text mb-2"></h5>
+
+                    <div class="list-group" id="notification">
+                        <h5 class="text-white">Loading...</h5>
+                      </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+
+    <script>
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        
+
+
+        $(document).ready(function() {
+            $(document).on('submit','#password-form',function(e) {
+              e.preventDefault();
+          
+              $.ajax({
+                url: "{% url 'user-change-password' %}",  // Ensure this URL is correct
+                type: 'POST',
+                data: $(this).serialize(),
+                headers:{
+                  'X-CSRFToken': getCookie('csrftoken')
+                },
+                dataType: 'json',
+          
+                success: function(response) {
+                  if (response.status === 'success') {
+                    $('#password-form').replaceWith(response.html);
+                    alert('Password Changed successfully!');
+
+                  } else {
+                    // If there are errors in the response
+                    $('#error-msg').empty(); // Clear previous errors
+                    for (let field in response.errors) {
+                      response.errors[field].forEach(function(error) {
+                        // Append each error message to the error container
+                        $('#error-msg').append('<h6 style="color:red;margin-bottom:10px;margin-bottom:10px;">' + field + ' : ' + error + '</h6>');
+                      });
+                    }
+                  }
+                },
+          
+                error: function(xhr, status, error) {
+                  // Handle error response from server (e.g., bad request)
+                  console.log('AJAX Error:', error);
+          
+                  // If errors are returned from the server, handle them
+                  let errors = xhr.responseJSON.errors;
+                  $('#error-msg').empty(); // Clear any previous errors
+                  for (let field in errors) {
+                    errors[field].forEach(function(error) {
+                      // Append each error message to the error container
+                      $('#error-msg').append('<h6 style="color:red;margin-bottom:10px;">' + field + ' : ' + error + '</h6>');
+                    });
+                  }
+                }
+              });
+            });
+          });
+          
+          setInterval(function(){
+            $(document).ready(function(){
+                $.ajax({
+                    url: "{% url 'fetch_notification' %}",
+                    dataType: 'json',
+                    success:function(res){
+                        if(res.unread>0){
+                            $('#sidebar-count').text(res.unread);
+                            $('.notif-text').html(`<span class="badge text-bg-success mr-1 ">${res.unread}</span> New Notifications`);
+
+                        }
+                        else{
+                            $('.notif-text').html(``);
+                            $('#sidebar-count').hide();
+
+                        }
+                        let html='';
+                        $.each(res.data,function(index,d){
+                            if (d.status==true){
+                                
+                                html+=`<div class="list-group-item mt-1 list${d.pk}"  aria-current="true">
+                                    <div class="row">
+                                        <div class="col-9"><h6>${d.content}</h6></div>  
+                                        <div class="col-2"><h6>${d.created_date}</h6></div>
+                                        <div class="col-1"><i class="fa-solid fa-check-double readbutton${d.pk}"></i></div>
+                                    </div>
+                                    </div>`;
+                            }
+                            else{
+
+                                html+=`<div class="list-group-item mt-1 list${d.pk}"  aria-current="true" style="background-color:#D3D3D3;">
+                                    <div class="row">
+                                        <div class="col-8"><h6>${d.content}</h6></div>
+                                        <div class="col-2"><h6>${d.created_date}</h6></div>
+                                        <div  class="col-2"><button class="btn btn-primary markreadbtn" data-notification="${d.pk}" data-index="${d.pk}" id="readbtn${d.pk}"><h6 style="color:white;">Mark as Read</h6></button></div>
+                                    </div>
+                                    </div>`;
+                            }
+                            
+                        })
+                        $('#notification').html(html)
+                    }
+                });
+            });
+        },5000);
+
+        $(document).on('click','.markreadbtn',function(){
+            let index=$(this).attr('data-index');
+            let not_id=$(this).attr('data-notification');
+            
+            $.ajax({
+                url:"{% url 'mark_read' %}",
+                data:{
+                    notification:not_id
+                },
+                dataType:'json',
+                success:function(res){
+                    if (res.bool===true){
+                        console.log('done');
+                        $('.list'+index).css('background-color','');
+                        $('#readbtn'+index).hide();
+                        $('.readbutton'+index).removeClass('readbutton');
+                    }
+                    
+                }
+            });
+        });
+
+
+
+      </script>
+      
+  
+    
+
+    {% endblock container %}

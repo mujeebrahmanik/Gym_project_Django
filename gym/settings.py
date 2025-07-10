@@ -159,11 +159,12 @@ AUTH_USER_MODEL = 'main.Custom_user'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'           # or your SMTP server
-EMAIL_PORT = 587                        # or 465 for SSL
-EMAIL_USE_TLS = True                    # or EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'mujeebrahmanikaynoor1234@gmail.com'
-EMAIL_HOST_PASSWORD = 'zadk ryys eyfi fdxg'
+EMAIL_HOST = os.getenv('SMTP_HOST')
+EMAIL_PORT = os.getenv('SMTP_PORT')
+EMAIL_USE_TLS = os.getenv('SMTP_USE_TLS') == 'True'
+EMAIL_HOST_USER = os.getenv('SMTP_USER')
+EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('SMTP_USER')
 
 
 

@@ -147,15 +147,20 @@
                             <li>{{f.feature}}</li>
                             {% endfor %}
                         </ul>
-                        {% check_user_package request.user.id i.id as package_check %}
-                        {% check_plan_Validity request.user.id i.id as plan_check %}
-                         
-                        {% if package_check and plan_check %}
-                        <h4 class="text-success mb-2">Active </h4>
-                        <button class="primary-btn btn-disabled" disabled>Purchased</button>
+                        {% if request.user.is_authenticated %}
+                            {% check_user_package request.user.id i.id as package_check %}
+                            {% check_plan_Validity request.user.id i.id as plan_check %}
+                            
+                            {% if package_check and plan_check %}
+                            <h4 class="text-success mb-2">Active </h4>
+                            <button class="primary-btn btn-disabled" disabled>Purchased</button>
+                            {% else %}
+                            <a href="{% url "checkout" i.id %}" class="primary-btn pricing-btn">Enroll now</a>
+                            {% endif %}
                         {% else %}
                         <a href="{% url "checkout" i.id %}" class="primary-btn pricing-btn">Enroll now</a>
                         {% endif %}
+
                     </div>
                 </div>
                 {% endfor %}
@@ -207,6 +212,7 @@
             </div>
             <div class="row">
                 <div class="ts-slider owl-carousel">
+                    {% if trainers %}
                     {% for i in trainers %}
                     <div class="col-lg-4">
                         {% if i.image %}
@@ -223,6 +229,7 @@
                         </div>
                     </div>
                     {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

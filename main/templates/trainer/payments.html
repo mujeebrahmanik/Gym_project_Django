@@ -29,6 +29,7 @@
                     {% include "trainer/sidebar.html" %}
                 </div>
                 <div class="col-lg-9">
+                  {% if data %}
 
 
                     <style>
@@ -71,7 +72,9 @@
                       
 
                     
-
+                {% else %}
+                <h2 class="text-warning text-center">No Payment Records</h2>
+                {% endif %}          
                     
             </div>
             

@@ -35,6 +35,7 @@
                            <h4 class="text-white text-center mb-3">CURRENT PLAN</h4>
                             
                                 <div style="width: 100%;">
+                                  {% if cplan %}
                                     <table style="width: 100%;" class="table table-dark table-striped-columns" border="1">
                                         
                                         
@@ -113,6 +114,11 @@
     
                                    
                                 </table>
+                                {% else %}
+                                <div class="card bg-dark" style="width: 100%;">
+                               <h2 class="text-warning text-center mt-5 mb-5">No Active Plan</h2>
+                              </div>
+                                {% endif %}
                        
                         </div>
                     
@@ -121,8 +127,10 @@
 
                     <div class="col-lg-6 col-md-6">
                         <h4 class="text-white text-center mb-3">MY TRAINER</h4>
+                        
                          
                         <div class="card bg-dark" style="width: 100%;">
+                          {% if a_trainer %}
                             <img src="{{a_trainer.trainer.image}}" class="card-img-top" alt="{{a_trainer.trainer}} trainer image" style="height:400px;object-fit:cover;">
                             <div class="card-body">
                               <h5 class="card-title text-white">{{a_trainer.trainer}}</h5>
@@ -157,6 +165,9 @@
 
                               {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
                             </div>
+                            {% else %}
+                            <h2 class="text-warning text-center mt-5 mb-5">No Trainer Assigned</h2>
+                            {% endif %}
                           </div>
                  
                  </div>

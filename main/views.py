@@ -236,14 +236,15 @@ def payment_cancel(request):
 @login_required
 def user_dashboard_view(request):
     user=request.user
-    plan=Subscription.objects.get(user=user)
+    plan=Subscription.objects.filter(user=user).first()
     today=date.today()
     status=0
-    if plan.end_date > today:
-        status=1
-    subscriber=Subscriber.objects.get(user=user)
-    a_trainer=Asign_trainer.objects.get(subscriber=subscriber)
-    achievment=Trainer_achievments.objects.filter(trainer=a_trainer.trainer)
+    if plan:
+        if plan.end_date > today:
+            status=1
+    subscriber=Subscriber.objects.filter(user=user).first()
+    a_trainer=Asign_trainer.objects.filter(subscriber=subscriber).first() if subscriber else None
+    achievment=Trainer_achievments.objects.filter(trainer=a_trainer.trainer) if a_trainer else None
     
     data=Notification.objects.filter(status=True).order_by('-id')
     unread=0
@@ -376,7 +377,9 @@ def trainer_dashboard_view(request):
         cache.delete(key)
         
     trainer=request.user
-    return render(request,'trainer/dashboard.html',{'trainer':trainer})
+    t=Trainer.objects.get(trainer=trainer)
+    assigned=Asign_trainer.objects.filter(trainer=t).count()
+    return render(request,'trainer/dashboard.html',{'trainer':trainer,'count':assigned})
     
     
     
